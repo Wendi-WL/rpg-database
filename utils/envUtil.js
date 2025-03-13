@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+// test
 function loadEnvFile(filePath) {
     if (fs.existsSync(filePath)) {
         const envFile = fs.readFileSync(filePath, 'utf8');
