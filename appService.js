@@ -1,6 +1,6 @@
 const oracledb = require('oracledb');
 const loadEnvFile = require('./utils/envUtil');
-
+const fs = require('fs');
 const envVariables = loadEnvFile('./.env');
 
 // Database configuration setup. Ensure your .env file has the required database credentials.
@@ -92,7 +92,6 @@ async function initiateDemotable() {
         } catch(err) {
             console.log('Table might not exist, proceeding to create...');
         }
-
         const result = await connection.execute(`
             CREATE TABLE DEMOTABLE (
                 id NUMBER PRIMARY KEY,
@@ -101,6 +100,41 @@ async function initiateDemotable() {
         `);
         return true;
     }).catch(() => {
+        return false;
+    });
+}
+
+async function initiateTables() {
+    return await withOracleDB(async (connection) => {
+        try{
+            const dropsql = fs.readFileSync('droptables.sql', 'utf8'); 
+            const dropStatements = dropsql.split(/;\s*$/m); 
+                
+            for (let stmt of dropStatements) {
+                if (stmt.trim()) {
+                    await connection.execute(stmt); 
+                }
+            }
+            console.log("Finished Deleting")
+        } catch (error){
+            console.log(error)
+        }
+        
+        
+              
+
+        const sql = fs.readFileSync('schema.sql', 'utf8'); 
+        const statements = sql.split(/;\s*$/m);
+        
+        for (let stmt of statements) {
+            if (stmt.trim()) {
+                await connection.execute(stmt); 
+            }
+        }
+        console.log("success")
+        return true;
+    }).catch (() => {
+        console.log("different erorr")
         return false;
     });
 }
@@ -145,8 +179,8 @@ async function countDemotable() {
 module.exports = {
     testOracleConnection,
     fetchDemotableFromDb,
-    initiateDemotable, 
     insertDemotable, 
     updateNameDemotable, 
-    countDemotable
+    countDemotable,
+    initiateTables,
 };

@@ -64,5 +64,14 @@ router.get('/count-demotable', async (req, res) => {
     }
 });
 
+router.post('/initiate-tables', async (req, res) => {
+    const initiatedTables = await appService.initiateTables();
+    if (initiatedTables) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+})
+
 
 module.exports = router;
