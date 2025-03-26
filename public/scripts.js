@@ -37,15 +37,16 @@ async function checkDbConnection() {
 }
 
 // Fetches data from the demotable and displays it.
-async function fetchAndDisplayUsers() {
-    const tableElement = document.getElementById('demotable');
+async function fetchAndDisplayPlayers() {
+    const tableElement = document.getElementById('playertable');
     const tableBody = tableElement.querySelector('tbody');
 
-    const response = await fetch('/demotable', {
+    const response = await fetch('/playertable', {
         method: 'GET'
     });
 
     const responseData = await response.json();
+    console.log(responseData)
     const demotableContent = responseData.data;
 
     // Always clear old, already fetched data before new fetching process.
@@ -53,9 +54,9 @@ async function fetchAndDisplayUsers() {
         tableBody.innerHTML = '';
     }
 
-    demotableContent.forEach(user => {
+    demotableContent.forEach(player=> {
         const row = tableBody.insertRow();
-        user.forEach((field, index) => {
+        player.forEach((field, index) => {
             const cell = row.insertCell(index);
             cell.textContent = field;
         });
@@ -68,6 +69,7 @@ async function resetDemotable() {
         method: 'POST'
     });
     const responseData = await response.json();
+    fetchTableData()
     if (responseData.success){
         alert("Success")
     } else {
@@ -75,21 +77,20 @@ async function resetDemotable() {
     }
 }
 
-// Inserts new records into the demotable.
-async function insertDemotable(event) {
+async function insertPlayertable(event) {
     event.preventDefault();
 
-    const idValue = document.getElementById('insertId').value;
-    const nameValue = document.getElementById('insertName').value;
+    const emailValue = document.getElementById('insertEmail').value;
+    const usernameValue = document.getElementById('insertUsername').value;
 
-    const response = await fetch('/insert-demotable', {
+    const response = await fetch('/insert-playertable', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id: idValue,
-            name: nameValue
+            email: emailValue,
+            username: usernameValue
         })
     });
 
@@ -104,39 +105,40 @@ async function insertDemotable(event) {
     }
 }
 
+
 // Updates names in the demotable.
-async function updateNameDemotable(event) {
-    event.preventDefault();
+// async function updateNameDemotable(event) {
+//     event.preventDefault();
 
-    const oldNameValue = document.getElementById('updateOldName').value;
-    const newNameValue = document.getElementById('updateNewName').value;
+//     const oldNameValue = document.getElementById('updateOldName').value;
+//     const newNameValue = document.getElementById('updateNewName').value;
 
-    const response = await fetch('/update-name-demotable', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            oldName: oldNameValue,
-            newName: newNameValue
-        })
-    });
+//     const response = await fetch('/update-name-demotable', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             oldName: oldNameValue,
+//             newName: newNameValue
+//         })
+//     });
 
-    const responseData = await response.json();
-    const messageElement = document.getElementById('updateNameResultMsg');
+//     const responseData = await response.json();
+//     const messageElement = document.getElementById('updateNameResultMsg');
 
-    if (responseData.success) {
-        messageElement.textContent = "Name updated successfully!";
-        fetchTableData();
-    } else {
-        messageElement.textContent = "Error updating name!";
-    }
-}
+//     if (responseData.success) {
+//         messageElement.textContent = "Name updated successfully!";
+//         fetchTableData();
+//     } else {
+//         messageElement.textContent = "Error updating name!";
+//     }
+// }
 
 // Counts rows in the demotable.
 // Modify the function accordingly if using different aggregate functions or procedures.
-async function countDemotable() {
-    const response = await fetch("/count-demotable", {
+async function countPlayertable() {
+    const response = await fetch("/count-playertable", {
         method: 'GET'
     });
 
@@ -145,7 +147,7 @@ async function countDemotable() {
 
     if (responseData.success) {
         const tupleCount = responseData.count;
-        messageElement.textContent = `The number of tuples in demotable: ${tupleCount}`;
+        messageElement.textContent = `The number of tuples in playertable: ${tupleCount}`;
     } else {
         alert("Error in count demotable!");
     }
@@ -159,15 +161,15 @@ async function countDemotable() {
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
     checkDbConnection();
-    //fetchTableData();
+    fetchTableData();
     document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
-    document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
-    document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    document.getElementById("insertPlayertable").addEventListener("submit", insertPlayertable);
+    //document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+    document.getElementById("countPlayertable").addEventListener("click", countPlayertable);
 };
 
 // General function to refresh the displayed table data. 
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
-    fetchAndDisplayUsers();
+    fetchAndDisplayPlayers();
 }

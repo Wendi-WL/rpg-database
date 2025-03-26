@@ -10,7 +10,7 @@ username VARCHAR(16) UNIQUE,
 email VARCHAR(255), 
 createDate DATE, 
 role VARCHAR(255), 
-guildName VARCHAR(16), 
+guildName VARCHAR(16) NULL, 
 FOREIGN KEY (guildName) REFERENCES Guild(name) 
 );
 
@@ -157,3 +157,7 @@ FOREIGN KEY (characterName) REFERENCES CreatesCharacter(name),
 FOREIGN KEY (questID) REFERENCES QuestInfo(questID)
 );
 
+CREATE SEQUENCE player_seq
+START WITH 1
+INCREMENT BY 1
+NOCACHE;

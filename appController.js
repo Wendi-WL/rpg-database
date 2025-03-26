@@ -15,23 +15,15 @@ router.get('/check-db-connection', async (req, res) => {
     }
 });
 
-router.get('/demotable', async (req, res) => {
-    const tableContent = await appService.fetchDemotableFromDb();
+
+router.get('/playertable', async (req, res) => {
+    const tableContent = await appService.fetchPlayertableFromDb();
     res.json({data: tableContent});
 });
 
-router.post("/initiate-demotable", async (req, res) => {
-    const initiateResult = await appService.initiateDemotable();
-    if (initiateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.post("/insert-demotable", async (req, res) => {
-    const { id, name } = req.body;
-    const insertResult = await appService.insertDemotable(id, name);
+router.post("/insert-playertable", async (req, res) => {
+    const { email, username } = req.body;
+    const insertResult = await appService.insertPlayertable(email, username);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -49,8 +41,8 @@ router.post("/update-name-demotable", async (req, res) => {
     }
 });
 
-router.get('/count-demotable', async (req, res) => {
-    const tableCount = await appService.countDemotable();
+router.get('/count-playertable', async (req, res) => {
+    const tableCount = await appService.countPlayertable();
     if (tableCount >= 0) {
         res.json({ 
             success: true,  

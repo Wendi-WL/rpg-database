@@ -85,28 +85,20 @@ async function fetchDemotableFromDb() {
     });
 }
 
-async function initiateDemotable() {
+async function fetchPlayertableFromDb() {
     return await withOracleDB(async (connection) => {
-        try {
-            await connection.execute(`DROP TABLE DEMOTABLE`);
-        } catch(err) {
-            console.log('Table might not exist, proceeding to create...');
-        }
-        const result = await connection.execute(`
-            CREATE TABLE DEMOTABLE (
-                id NUMBER PRIMARY KEY,
-                name VARCHAR2(20)
-            )
-        `);
-        return true;
+        const result = await connection.execute('SELECT * FROM PLAYERJOINS');
+        return result.rows;
     }).catch(() => {
-        return false;
+        return [];
     });
 }
+
 
 async function initiateTables() {
     return await withOracleDB(async (connection) => {
         try{
+            // Deleted all existing tables
             const dropsql = fs.readFileSync('droptables.sql', 'utf8'); 
             const dropStatements = dropsql.split(/;\s*$/m); 
                 
@@ -119,10 +111,8 @@ async function initiateTables() {
         } catch (error){
             console.log(error)
         }
-        
-        
-              
 
+        // Add all tables
         const sql = fs.readFileSync('schema.sql', 'utf8'); 
         const statements = sql.split(/;\s*$/m);
         
@@ -153,6 +143,20 @@ async function insertDemotable(id, name) {
     });
 }
 
+async function insertPlayertable(username, email) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO PlayerJoins (accountID, username, email, createDate, role, guildName) VALUES (player_seq.NEXTVAL ,:username, :email, SYSDATE, 'member', NULL)`,
+            [username, email],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
 async function updateNameDemotable(oldName, newName) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -167,9 +171,9 @@ async function updateNameDemotable(oldName, newName) {
     });
 }
 
-async function countDemotable() {
+async function countPlayertable() {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT Count(*) FROM DEMOTABLE');
+        const result = await connection.execute('SELECT Count(*) FROM PlayerJoins');
         return result.rows[0][0];
     }).catch(() => {
         return -1;
@@ -179,8 +183,10 @@ async function countDemotable() {
 module.exports = {
     testOracleConnection,
     fetchDemotableFromDb,
-    insertDemotable, 
+    insertPlayertable,
+    fetchPlayertableFromDb,
     updateNameDemotable, 
-    countDemotable,
+    countPlayertable,
     initiateTables,
+
 };

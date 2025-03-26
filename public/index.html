@@ -26,13 +26,18 @@
 
     <!-- Show 'Demotable'. 
         Data will be fetched and inserted here dynamically using JavaScript. -->
-    <h2>Show Demotable</h2>
-    <table id="demotable" border="1">
+    <h2>Show Player Table</h2>
+    <table id="playertable" border="1">
         <thead>
             <tr>
                 <!--Table head, need to be adjusted accordingly to align with your own.-->
-                <th>ID</th>
-                <th>Name</th>
+
+                <th>AccountID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>CreateDate</th>
+                <th>Role</th>
+                <th>GuildName</th>
             </tr>
         </thead>
         <tbody>
@@ -41,7 +46,7 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
-    <h2>Reset Demotable</h2>
+    <h2>Reset All Tables</h2>
     <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
     <button id="resetDemotable"> reset </button> <br>
     <!-- A placeholder to display messages related to the reset operation. -->
@@ -49,10 +54,10 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
-    <h2> Insert Values into DemoTable </h2>
-    <form id="insertDemotable">
-        ID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
-        Name: <input type="text" id="insertName" placeholder="Enter Name" maxlength="20"> <br><br>
+    <h2> Insert Values into Playertable </h2>
+    <form id="insertPlayertable">
+        Email: <input type="email" id="insertEmail" placeholder="Enter Email" maxlength="255"> <br><br>
+        Username: <input type="text" id="insertUsername" placeholder="Enter Username" maxlength="16"> <br><br>
 
         <button type="submit"> insert </button> <br>
     </form>
@@ -74,7 +79,7 @@
     <br><hr><br> <!-- ========================================================================= -->
 
     <h2>Count the Tuples in DemoTable</h2>
-    <button id="countDemotable"> count </button> <br><br>
+    <button id="countPlayertable"> count </button> <br><br>
     <!-- A placeholder to display the count result. -->
     <div id="countResultMsg"></div> <br>
 
