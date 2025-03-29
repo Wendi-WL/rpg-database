@@ -1,3 +1,26 @@
+DROP TABLE ARMOURNAME CASCADE CONSTRAINTS;
+DROP TABLE ARMOURSTAT CASCADE CONSTRAINTS;
+DROP TABLE BEFRIENDS CASCADE CONSTRAINTS;
+DROP TABLE CHARACTERSTATS CASCADE CONSTRAINTS;
+DROP TABLE CHALLENGES CASCADE CONSTRAINTS;
+DROP TABLE COLLECTIBLE CASCADE CONSTRAINTS;
+DROP TABLE COMPLETES CASCADE CONSTRAINTS;
+DROP TABLE CONSUMABLE CASCADE CONSTRAINTS;
+DROP TABLE CONSUMABLESTAT CASCADE CONSTRAINTS;
+DROP TABLE CRAFTSARMOUR CASCADE CONSTRAINTS;
+DROP TABLE CREATESCHARACTER CASCADE CONSTRAINTS;
+DROP TABLE EQUIPS CASCADE CONSTRAINTS;
+DROP TABLE GUILD CASCADE CONSTRAINTS;
+DROP TABLE HAVESTAGE CASCADE CONSTRAINTS;
+DROP TABLE ITEM CASCADE CONSTRAINTS;
+DROP TABLE LEARNSSKILL CASCADE CONSTRAINTS;
+DROP TABLE MISSION CASCADE CONSTRAINTS;
+DROP TABLE OWNS CASCADE CONSTRAINTS;
+DROP TABLE PLAYERJOINS CASCADE CONSTRAINTS;
+DROP TABLE QUESTINFO CASCADE CONSTRAINTS;
+DROP TABLE QUESTLOCATION CASCADE CONSTRAINTS;
+DROP SEQUENCE player_seq;
+
 CREATE TABLE Guild (
     name VARCHAR(16) PRIMARY KEY, 
     memberCount INTEGER, 
@@ -161,144 +184,203 @@ NOCACHE;
 
 INSERT INTO Guild
 VALUES
-('Goats Guild', 3, 'A guild for goats all around the world'), 
-('Best Players', 2, 'Only the best players are in this guild'), 
-('Guild 1', 1, 'guild 1 description'), 
-('Guild 2', 1, 'guild 2 description'), 
-('Guild 3', 1, 'guild 3 description');
+    ('Goats Guild', 3, 'A guild for goats all around the world'), 
+    ('Best Players', 2, 'Only the best players are in this guild'), 
+    ('Guild 1', 1, 'guild 1 description'), 
+    ('Guild 2', 1, 'guild 2 description'), 
+    ('Guild 3', 1, 'guild 3 description');
 
 INSERT INTO PlayerJoins 
 VALUES
-(1, 'playerone', 'iplaygames@email.com', '2025-01-01', 'member', 'Best Players'), 
-(2, 'thegoat', 'goatedgamer@email.com', '2025-01-05', 'leader', 'Goats Guild'), 
-(3, 'legoat', 'goatedgamer@email.com', '2025-02-05', 'deputy', 'Goats Guild'), 
-(4, 'dabest', 'bestest@email.com', '2025-02-20', 'leader', 'Best Players'), 
-(5, 'mountaingoat', 'mountaingoat@email.com', '2025-02-21', 'member', 'Goats Guild'), 
-(6, 'solo', 'soloplayer@email.com', '2025-02-22', NULL, NULL), 
-(7, 'lesunshine', 'a@gmail.com', '2025-02-22', 'leader', 'Guild 1'), 
-(8, 'lebron', 'b@gmail.com', '2025-02-22', 'leader', 'Guild 2'),
-(9, 'leGM', 'c@gmail.com', '2025-02-22', 'leader', 'Guild 3');
+    (1, 'playerone', 'iplaygames@email.com', '2025-01-01', 'member', 'Best Players'), 
+    (2, 'thegoat', 'goatedgamer@email.com', '2025-01-05', 'leader', 'Goats Guild'), 
+    (3, 'legoat', 'goatedgamer@email.com', '2025-02-05', 'deputy', 'Goats Guild'), 
+    (4, 'dabest', 'bestest@email.com', '2025-02-20', 'leader', 'Best Players'), 
+    (5, 'mountaingoat', 'mountaingoat@email.com', '2025-02-21', 'member', 'Goats Guild'), 
+    (6, 'solo', 'soloplayer@email.com', '2025-02-22', NULL, NULL), 
+    (7, 'lesunshine', 'a@gmail.com', '2025-02-22', 'leader', 'Guild 1'), 
+    (8, 'lebron', 'b@gmail.com', '2025-02-22', 'leader', 'Guild 2'),
+    (9, 'leGM', 'c@gmail.com', '2025-02-22', 'leader', 'Guild 3');
 
 INSERT INTO Befriends
 VALUES
-(1, 2, 10), 
-(2, 3, 23), 
-(2, 5, 5), 
-(3, 5, 1), 
-(7, 8, 5);
+    (1, 2, 10), 
+    (2, 3, 23), 
+    (2, 5, 5), 
+    (3, 5, 1), 
+    (7, 8, 5);
 
 INSERT INTO Mission
 VALUES
-(101, 'kill 3 monsters', '10 coins'), 
-(102, 'defeat a boss character', 'crown'), 
-(103, 'add a friend', 'friendship bracelet'), 
-(104, 'finish all quests', '100000 coins'),
-(105, 'finish first quest', '10 coins');
+    (101, 'kill 3 monsters', '10 coins'), 
+    (102, 'defeat a boss character', 'crown'), 
+    (103, 'add a friend', 'friendship bracelet'), 
+    (104, 'finish first quest', '10 coins'),
+    (105, 'finish all quests', '100000 coins');
 
 INSERT INTO Completes
 VALUES
-(1, 101, '2025-01-01 15:30:10'), 
-(1, 102, '2025-01-01 15:35:33'), 
-(1, 103, '2025-01-05 22:00:05'), 
-(2, 104, '2025-01-01 13:35:33'), 
-(3, 104, '2025-01-05 20:00:05');
+    (1, 101, '2025-01-01 15:30:10'), 
+    (1, 102, '2025-01-01 15:35:33'), 
+    (1, 103, '2025-01-05 22:00:05'), 
+    (2, 104, '2025-01-05 13:35:33'), 
+    (3, 104, '2025-02-05 20:00:05');
 
 INSERT INTO Item
 VALUES
-('Bracelet', 'A token of your friendship'), 
-('Crown', 'Reward for defeating your first boss'), 
-('Ancient Coin', 'A rare coin from ancient times'),
-('Golden Feather', 'A shimmering feather from a rare bird'),
-('Dragon Scale', 'A tough scale from a defeated dragon'),
-('Sandwich', 'A tasty sandwich that boosts attack'),
-('Strength potion', 'A potion that increases your strength temporarily'),
-('Healing Herb', 'A magical herb that restores health'),
-('Energy Drink', 'A beverage that restores stamina'),
-('Elixir of Wisdom', 'A rare potion that increases mana');
+    ('Bracelet', 'A token of your friendship'), 
+    ('Crown', 'Reward for defeating your first boss'), 
+    ('Ancient Coin', 'A rare coin from ancient times'),
+    ('Golden Feather', 'A shimmering feather from a rare bird'),
+    ('Dragon Scale', 'A tough scale from a defeated dragon'),
+    ('Sandwich', 'A tasty sandwich that boosts attack'),
+    ('Strength potion', 'A potion that increases your strength temporarily'),
+    ('Healing Herb', 'A magical herb that restores health'),
+    ('Energy Drink', 'A beverage that restores stamina'),
+    ('Elixir of Wisdom', 'A rare potion that increases mana');
 
 INSERT INTO ConsumableStat
 VALUES
-('common', 2, 'attack'), 
-('common', 4, 'defence'), 
-('rare', 5, 'attack'), 
-('rare', 8, 'defence'), 
-('legendary', 10, 'attack');
+    ('common', 2, 'attack'), 
+    ('common', 4, 'defence'), 
+    ('common', 5, 'stamina'), 
+    ('common', 5, 'health'), 
+    ('rare', 5, 'attack'), 
+    ('rare', 8, 'defence'), 
+    ('rare', 10, 'stamina'), 
+    ('rare', 10, 'health'), 
+    ('rare', 10, 'mana'), 
+    ('legendary', 10, 'attack'),
+    ('legendary', 16, 'defence'),
+    ('legendary', 20, 'mana');
 
 INSERT INTO Consumable
 VALUES
-('Sandwich', 5, 'common', 'attack'), 
-('Strength potion', 2, 'rare', 'attack'), 
-('Healing Herb', 3, 'uncommon', 'health'), 
-('Energy Drink', 4, 'common', 'stamina'), 
-('Elixir of Wisdom', 1, 'legendary', 'mana');
+    ('Sandwich', 5, 'common', 'attack'), 
+    ('Strength potion', 2, 'rare', 'attack'), 
+    ('Healing Herb', 3, 'rare', 'health'), 
+    ('Energy Drink', 4, 'common', 'stamina'), 
+    ('Elixir of Wisdom', 1, 'legendary', 'mana');
 
 INSERT INTO Collectible
 VALUES
-('Bracelet', 'Mission reward'), 
-('Crown', 'Mission reward'),
-('Ancient Coin', 'Hidden treasure'), 
-('Golden Feather', 'Rare bird drop'), 
-('Dragon Scale', 'Defeated a dragon');
+    ('Bracelet', 'Mission reward'), 
+    ('Crown', 'Mission reward'),
+    ('Ancient Coin', 'Hidden treasure'), 
+    ('Golden Feather', 'Rare bird drop'), 
+    ('Dragon Scale', 'Defeated a dragon');
 
 INSERT INTO Owns
 VALUES
-(1, 'Bracelet'), 
-(1, 'Crown'), 
-(2, 'Bracelet'), 
-(3, 'Bracelet'), 
-(5, 'Bracelet'), 
-(7, 'Bracelet'), 
-(8, 'Bracelet'), 
-(4, 'Ancient Coin'), 
-(6, 'Dragon Scale');
+    (1, 'Bracelet'), 
+    (1, 'Crown'), 
+    (2, 'Bracelet'), 
+    (3, 'Bracelet'), 
+    (5, 'Bracelet'), 
+    (7, 'Bracelet'), 
+    (8, 'Bracelet'), 
+    (4, 'Ancient Coin'), 
+    (6, 'Dragon Scale');
 
 INSERT INTO CharacterStats
 VALUES
-(1, 5, 3, 'fighter'), 
-(2, 6, 4, 'fighter'), 
-(3, 8, 4, 'fighter'),
-(1, 3, 5, 'tank'), 
-(2, 4, 6, 'tank'), 
-(3, 4, 8, 'tank'),
-(1, 7, 1, 'assassin'),
-(2, 8, 2, 'assassin'),
-(3, 9, 3, 'assassin');
+    (1, 5, 3, 'fighter'), 
+    (2, 6, 4, 'fighter'), 
+    (3, 8, 4, 'fighter'),
+    (1, 3, 5, 'tank'), 
+    (2, 4, 6, 'tank'), 
+    (3, 4, 8, 'tank'),
+    (1, 7, 1, 'mage'),
+    (2, 8, 2, 'mage'),
+    (3, 9, 3, 'mage');
 
 
 INSERT INTO CreatesCharacter
 VALUES
-('Bob', 3, 'fighter', 1), 
-('Joe', 3, 'tank', 2), 
-('Alice', 2, 'mage', 3), 
-('Eve', 5, 'rogue', 4), 
-('Max', 1, 'archer', 5), 
-('Luna', 4, 'healer', 6), 
-('Kai', 6, 'summoner', 7), 
-('Zane', 2, 'berserker', 8),
-('Cody', 2, 'berserker', 9);
+    ('Bob', 3, 'fighter', 1), 
+    ('Joe', 3, 'tank', 2), 
+    ('Alice', 2, 'mage', 3), 
+    ('Eve', 2, 'fighter', 4), 
+    ('Max', 1, 'mage', 5), 
+    ('Luna', 2, 'tank', 6), 
+    ('Kai', 3, 'mage', 7), 
+    ('Zane', 1, 'fighter', 8),
+    ('Cody', 1, 'tank', 9);
 
 INSERT INTO ArmourName
 VALUES
-('Light headgear', 'common', 'helmet', 'defence'),
-('Nice helmet', 'rare', 'helmet', 'defence'),
-('Breastplate', 'rare', 'upper', 'attack'),
-('Fleet footwear', 'rare', 'boots', 'attack'),
-('Cool Shoes', 'epic', 'boots', 'attack');
-
+    ('Light headgear', 'common', 'helmet', 'defence'),
+    ('Nice helmet', 'rare', 'helmet', 'defence'),
+    ('Breastplate', 'rare', 'upper', 'attack'),
+    ('Fleet footwear', 'rare', 'boots', 'attack'),
+    ('Cool Shoes', 'epic', 'boots', 'attack');
 
 INSERT INTO CraftsArmour
 VALUES
-(1, 'Light headgear', 'defence', 1), 
-(2, 'Nice helmet', 'defence', 1), 
-(3, 'Breastplate', 'attack', 1),
-(4, 'Breastplate', 'defence', 2), 
-(5, 'Fleet footwear', 'attack', 5);
+    (1, 'Light headgear', 'defence', 1), 
+    (2, 'Nice helmet', 'defence', 1), 
+    (3, 'Breastplate', 'attack', 1),
+    (4, 'Breastplate', 'defence', 2), 
+    (5, 'Fleet footwear', 'attack', 5);
 
+INSERT INTO ArmourStat
+VALUES
+    ('rare', 5, 'attack', 'upper'), 
+    ('rare', 6, 'defence', 'upper'),
+    ('common', 2, 'defence', 'helmet'), 
+    ('common', 1, 'attack', 'helmet'), 
+    ('rare', 4, 'defence', 'helmet'),
+    ('rare', 3, 'attack', 'boots'),
 
 INSERT INTO Equips
 VALUES
-(2, 'Bob'), 
-(3, 'Bob'), 
-(4, 'Joe'), 
-(5, 'Joe'), 
-(1, 'Joe');
+    (2, 'Bob'), 
+    (3, 'Bob'), 
+    (4, 'Joe'), 
+    (5, 'Joe'), 
+    (1, 'Joe');
+
+INSERT INTO LearnsSkill
+VALUES
+    ('Bob Punch', 'Deals damage to enemy based on attack', 'Bob'), 
+    ('Bob Block', 'Decreases incoming damage by defence stat', 'Bob'), 
+    ('Joe Protect', 'Decreases incoming damage by 2x defence stat', 'Joe'), 
+    ('Alice Cast', 'Grants a 1.5x buff for magical attacks', 'Alice'), 
+    ('Alice Dodge', '50% chance of taking no damage', 'Alice');
+
+INSERT INTO QuestLocation
+VALUES
+    ('Dungeon', 'Skeleton King'), 
+    ('Forest', 'Ferocious Bear'), 
+    ('Desert', 'Prickly Cactus'), 
+    ('Enchanted Lake', 'Aquatic Monstrosity'),
+    ('Castle', 'Arrogant Tyrant');
+
+INSERT INTO QuestInfo
+VALUES
+    (1, 'Skeleton King'), 
+    (2, 'Ferocious Bear'), 
+    (3, 'Prickly Cactus'), 
+    (4, 'Aquatic Monstrosity'), 
+    (5, 'Arrogant Tyrant');
+
+INSERT INTO HaveStage
+VALUES
+    (1, 'defeat 3 enemies', 1), 
+    (2, 'find treasure chest', 1), 
+    (3, 'defeat all enemies', 1), 
+    (1, 'find hidden path', 2), 
+    (2, 'defeat all enemies', 2),
+    (1, 'find hidden path', 3), 
+    (2, 'defeat all enemies', 3), 
+    (1, 'collect 5 herbs', 4), 
+    (1, 'reach location without being seen', 5), 
+    (2, 'defeat all enemies', 5);
+
+INSERT INTO Challenges
+VALUES
+    ('Bob', 1, 2025-01-01, 15:30:58), 
+    ('Bob', 2, 2025-01-01, 15:45:27), 
+    ('Joe', 1, 2025-01-05, 21:00:05), 
+    ('Joe', 2, 2025-01-05, 21:07:11), 
+    ('Joe', 2, 2025-01-06, 10:03:15);
