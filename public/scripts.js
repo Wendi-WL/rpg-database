@@ -63,9 +63,9 @@ async function fetchAndDisplayPlayers() {
     });
 }
 
-// This function resets or initializes the demotable.
+// This function resets or initializes the tables
 async function resetDemotable() {
-    const response = await fetch("/initiate-tables", {
+    const response = await fetch("/initialize-db", {
         method: 'POST'
     });
     const responseData = await response.json();
@@ -104,36 +104,6 @@ async function insertPlayertable(event) {
         messageElement.textContent = "Error inserting data!";
     }
 }
-
-
-// Updates names in the demotable.
-// async function updateNameDemotable(event) {
-//     event.preventDefault();
-
-//     const oldNameValue = document.getElementById('updateOldName').value;
-//     const newNameValue = document.getElementById('updateNewName').value;
-
-//     const response = await fetch('/update-name-demotable', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//             oldName: oldNameValue,
-//             newName: newNameValue
-//         })
-//     });
-
-//     const responseData = await response.json();
-//     const messageElement = document.getElementById('updateNameResultMsg');
-
-//     if (responseData.success) {
-//         messageElement.textContent = "Name updated successfully!";
-//         fetchTableData();
-//     } else {
-//         messageElement.textContent = "Error updating name!";
-//     }
-// }
 
 // Counts rows in the demotable.
 // Modify the function accordingly if using different aggregate functions or procedures.

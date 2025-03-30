@@ -15,6 +15,14 @@ router.get('/check-db-connection', async (req, res) => {
     }
 });
 
+router.post('/initialize-db', async (req, res) => {
+    const initDB = await appService.initializeDB();
+    if (initDB) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+})
 
 router.get('/playertable', async (req, res) => {
     const tableContent = await appService.fetchPlayertableFromDb();
@@ -55,15 +63,5 @@ router.get('/count-playertable', async (req, res) => {
         });
     }
 });
-
-router.post('/initiate-tables', async (req, res) => {
-    const initiatedTables = await appService.initiateTables();
-    if (initiatedTables) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-})
-
 
 module.exports = router;
