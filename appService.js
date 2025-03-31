@@ -127,10 +127,36 @@ async function countPlayertable() {
     });
 }
 
+async function updateUserGuild(username, guildName, guildRole) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            'UPDATE PlayerJoins SET guildName = :guildName, role = :guildRole WHERE username = :username',
+             [guildName, guildRole, username],
+             { autoCommit: true }
+        );
+
+        if (result.rowsAffected === 0) {
+            throw new Error(`User ${username} not found in PlayerJoins or Guild ${guildName} not found`);
+        }
+
+        await connection.execute(
+            'UPDATE Guild SET memberCount = memberCount + 1 WHERE name = :guildName',
+            [guildName]
+        )
+
+        return result.rowsAffected && result.rowsAffected > 0;
+
+    }).catch ((err) => {
+        console.log(err)
+        return false;
+    })
+}
+
 module.exports = {
     testOracleConnection,
     insertPlayertable,
     fetchPlayertableFromDb,
     countPlayertable,
     initializeDB,
+    updateUserGuild
 };

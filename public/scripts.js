@@ -76,6 +76,23 @@ async function resetDemotable() {
         alert("Error initializing table")
     }
 }
+// Counts rows in the demotable.
+// Modify the function accordingly if using different aggregate functions or procedures.
+async function countPlayertable() {
+    const response = await fetch("/count-playertable", {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('countResultMsg');
+
+    if (responseData.success) {
+        const tupleCount = responseData.count;
+        messageElement.textContent = `The number of tuples in playertable: ${tupleCount}`;
+    } else {
+        alert("Error in count demotable!");
+    }
+}
 
 async function insertPlayertable(event) {
     event.preventDefault();
@@ -105,22 +122,41 @@ async function insertPlayertable(event) {
     }
 }
 
-// Counts rows in the demotable.
-// Modify the function accordingly if using different aggregate functions or procedures.
-async function countPlayertable() {
-    const response = await fetch("/count-playertable", {
-        method: 'GET'
-    });
 
-    const responseData = await response.json();
-    const messageElement = document.getElementById('countResultMsg');
+// Updates a user's guild and gives them a role
+async function updateUserGuild(event) {
+    event.preventDefault();
+    const usernameValue = document.getElementById('updateGuild').value;
+    const guildNameValue = document.getElementById('updateUserGuildName').value;
+    const guildRoleValue = document.getElementById('updateUserGuildRole').value;
+    try {
+        const response = await fetch('/update-user-guild', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: usernameValue,
+                guildName: guildNameValue,
+                guildRole: guildRoleValue
+            })
+        });
+        const responseData = await response.json();
+        const messageElement = document.getElementById('updateUserGuildResultMsg');
 
-    if (responseData.success) {
-        const tupleCount = responseData.count;
-        messageElement.textContent = `The number of tuples in playertable: ${tupleCount}`;
-    } else {
-        alert("Error in count demotable!");
+            if (responseData.success) {
+                messageElement.textContent = "Success";
+                alert(`Added ${usernameValue} to ${guildNameValue}`)
+                fetchTableData();
+            } else {
+                alert("Nonexistant username or guild");
+            }
+    } catch(error) {
+        console.log(error)
     }
+
+    
+
 }
 
 
@@ -134,7 +170,7 @@ window.onload = function() {
     fetchTableData();
     document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
     document.getElementById("insertPlayertable").addEventListener("submit", insertPlayertable);
-    //document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+    document.getElementById("updateUserGuild").addEventListener("submit", updateUserGuild);
     document.getElementById("countPlayertable").addEventListener("click", countPlayertable);
 };
 

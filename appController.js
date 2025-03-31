@@ -39,9 +39,9 @@ router.post("/insert-playertable", async (req, res) => {
     }
 });
 
-router.post("/update-name-demotable", async (req, res) => {
-    const { oldName, newName } = req.body;
-    const updateResult = await appService.updateNameDemotable(oldName, newName);
+router.post('/update-user-guild', async (req, res) => {
+    const { username, guildName, guildRole } = req.body;
+    const updateResult = await appService.updateUserGuild(username, guildName, guildRole);
     if (updateResult) {
         res.json({ success: true });
     } else {
