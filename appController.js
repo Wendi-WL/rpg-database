@@ -30,8 +30,8 @@ router.get('/playertable', async (req, res) => {
 });
 
 router.post("/insert-playertable", async (req, res) => {
-    const { email, username } = req.body;
-    const insertResult = await appService.insertPlayertable(email, username);
+    const { username, email } = req.body;
+    const insertResult = await appService.insertPlayertable(username, email);
     if (insertResult) {
         res.json({ success: true });
     } else {

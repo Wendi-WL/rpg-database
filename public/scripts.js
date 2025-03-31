@@ -80,8 +80,8 @@ async function resetDemotable() {
 async function insertPlayertable(event) {
     event.preventDefault();
 
-    const emailValue = document.getElementById('insertEmail').value;
     const usernameValue = document.getElementById('insertUsername').value;
+    const emailValue = document.getElementById('insertEmail').value;
 
     const response = await fetch('/insert-playertable', {
         method: 'POST',
@@ -89,8 +89,8 @@ async function insertPlayertable(event) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            email: emailValue,
-            username: usernameValue
+            username: usernameValue,
+            email: emailValue
         })
     });
 

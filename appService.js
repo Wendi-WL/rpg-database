@@ -79,7 +79,6 @@ async function testOracleConnection() {
 async function fetchPlayertableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM PLAYERJOINS');
-        console.log(result)
         return result.rows;
     }).catch(() => {
         return [];
@@ -108,7 +107,7 @@ async function initializeDB() {
 async function insertPlayertable(username, email) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO PlayerJoins (accountID, username, email, createDate, role, guildName) VALUES (player_seq.NEXTVAL ,:username, :email, SYSDATE, NULL, NULL)`,
+            'INSERT INTO PlayerJoins (accountID, username, email, createDate, role, guildName) VALUES (player_seq.NEXTVAL, :username, :email, SYSDATE, NULL, NULL)',
             [username, email],
             { autoCommit: true }
         );
