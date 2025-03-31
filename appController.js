@@ -22,7 +22,7 @@ router.post('/initialize-db', async (req, res) => {
     } else {
         res.status(500).json({ success: false });
     }
-})
+});
 
 router.get('/playertable', async (req, res) => {
     const tableContent = await appService.fetchPlayertableFromDb();
