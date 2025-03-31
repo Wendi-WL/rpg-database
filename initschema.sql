@@ -25,24 +25,24 @@ ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD';
 
 CREATE TABLE Guild (
     name VARCHAR(16) PRIMARY KEY, 
-    memberCount INTEGER, 
+    memberCount INTEGER NOT NULL, 
     description VARCHAR(255) 
 );
 
 CREATE TABLE PlayerJoins ( 
     accountID INTEGER PRIMARY KEY,
-    username VARCHAR(16) UNIQUE,
-    email VARCHAR(255), 
+    username VARCHAR(16) UNIQUE NOT NULL,
+    email VARCHAR(255) NOT NULL, 
     createDate DATE, 
     role VARCHAR(255), 
-    guildName VARCHAR(16) NULL, 
+    guildName VARCHAR(16), 
     FOREIGN KEY (guildName) REFERENCES Guild(name) 
 );
 
 CREATE TABLE Befriends (
     account1ID INTEGER,
     account2ID INTEGER,
-    friendshipLevel INTEGER,
+    friendshipLevel INTEGER NOT NULL,
     PRIMARY KEY (account1ID, account2ID),
     FOREIGN KEY (account1ID) REFERENCES PlayerJoins(accountID), 
     FOREIGN KEY (account2ID) REFERENCES PlayerJoins(accountID)
@@ -70,16 +70,16 @@ CREATE TABLE Item (
 
 CREATE TABLE ConsumableStat ( 
     rarity VARCHAR(16), 
-    stat INTEGER, 
+    stat INTEGER NOT NULL, 
     boostType VARCHAR(8), 
     PRIMARY KEY (rarity, boostType) 
 );
 
 CREATE TABLE Consumable ( 
     name VARCHAR(16), 
-    count INTEGER, 
-    rarity VARCHAR(16), 
-    boostType VARCHAR(8), 
+    count INTEGER NOT NULL, 
+    rarity VARCHAR(16) NOT NULL, 
+    boostType VARCHAR(8) NOT NULL, 
     PRIMARY KEY (name), 
     FOREIGN KEY (name) REFERENCES Item(name)
 );
@@ -101,31 +101,31 @@ CREATE TABLE Owns (
 
 CREATE TABLE CharacterStats ( 
     characterLevel INTEGER, 
-    attack INTEGER, 
-    defence INTEGER, 
+    attack INTEGER NOT NULL, 
+    defence INTEGER NOT NULL, 
     class VARCHAR(8), 
     PRIMARY KEY (characterLevel, class) 
 );
 
 CREATE TABLE CreatesCharacter ( 
     name VARCHAR(16) PRIMARY KEY, 
-    characterLevel INTEGER, 
-    class VARCHAR(10),
+    characterLevel INTEGER NOT NULL, 
+    class VARCHAR(10) NOT NULL,
     playerID INTEGER UNIQUE NOT NULL, 
     FOREIGN KEY (playerID) REFERENCES PlayerJoins(accountID) 
 );
 
 CREATE TABLE ArmourName (
     name VARCHAR(16) PRIMARY KEY,
-    rarity VARCHAR(16), 
-    equipType VARCHAR(8), 
-    boostType VARCHAR(8)
+    rarity VARCHAR(16) NOT NULL, 
+    equipType VARCHAR(8) NOT NULL, 
+    boostType VARCHAR(8) NOT NULL
 );
 
 
 CREATE TABLE ArmourStat ( 
     rarity VARCHAR(16), 
-    stat INTEGER, 
+    stat INTEGER NOT NULL, 
     boostType VARCHAR(8), 
     equipType VARCHAR(8), 
     PRIMARY KEY (rarity, boostType, equipType) 
@@ -133,8 +133,8 @@ CREATE TABLE ArmourStat (
 
 CREATE TABLE CraftsArmour (
     armourID INTEGER PRIMARY KEY, 
-    name VARCHAR(16), 
-    boostType VARCHAR(8),
+    name VARCHAR(16) NOT NULL, 
+    boostType VARCHAR(8) NOT NULL,
     accountID INTEGER NOT NULL, 
     FOREIGN KEY (accountID) REFERENCES PlayerJoins(accountID) 
 );
@@ -191,15 +191,15 @@ INSERT INTO Guild VALUES ('Guild 1', 1, 'guild 1 description');
 INSERT INTO Guild VALUES ('Guild 2', 1, 'guild 2 description'); 
 INSERT INTO Guild VALUES ('Guild 3', 1, 'guild 3 description');
 
-INSERT INTO PlayerJoins (accountid, username, email, createdate, role, guildname) VALUES (1, 'playerone', 'iplaygames@email.com', '2025-01-01', 'member', 'Best Players'); 
-INSERT INTO PlayerJoins VALUES (2, 'thegoat', 'goatedgamer@email.com', '2025-01-05', 'leader', 'Goats Guild'); 
-INSERT INTO PlayerJoins VALUES (3, 'legoat', 'goatedgamer@email.com', '2025-02-05', 'deputy', 'Goats Guild'); 
-INSERT INTO PlayerJoins VALUES (4, 'dabest', 'bestest@email.com', '2025-02-20', 'leader', 'Best Players'); 
-INSERT INTO PlayerJoins VALUES (5, 'mountaingoat', 'mountaingoat@email.com', '2025-02-21', 'member', 'Goats Guild'); 
-INSERT INTO PlayerJoins VALUES (6, 'solo', 'soloplayer@email.com', '2025-02-22', NULL, NULL); 
-INSERT INTO PlayerJoins VALUES (7, 'lesunshine', 'a@gmail.com', '2025-02-22', 'leader', 'Guild 1'); 
-INSERT INTO PlayerJoins VALUES (8, 'lebron', 'b@gmail.com', '2025-02-22', 'leader', 'Guild 2');
-INSERT INTO PlayerJoins VALUES (9, 'leGM', 'c@gmail.com', '2025-02-22', 'leader', 'Guild 3');
+INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, 'playerone', 'iplaygames@email.com', '2025-01-01', 'member', 'Best Players'); 
+INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, 'thegoat', 'goatedgamer@email.com', '2025-01-05', 'leader', 'Goats Guild'); 
+INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, 'legoat', 'goatedgamer@email.com', '2025-02-05', 'deputy', 'Goats Guild'); 
+INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, 'dabest', 'bestest@email.com', '2025-02-20', 'leader', 'Best Players'); 
+INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, 'mountaingoat', 'mountaingoat@email.com', '2025-02-21', 'member', 'Goats Guild'); 
+INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, 'solo', 'soloplayer@email.com', '2025-02-22', NULL, NULL); 
+INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, 'lesunshine', 'a@gmail.com', '2025-02-22', 'leader', 'Guild 1'); 
+INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, 'lebron', 'b@gmail.com', '2025-02-22', 'leader', 'Guild 2');
+INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, 'leGM', 'c@gmail.com', '2025-02-22', 'leader', 'Guild 3');
 
 INSERT INTO Befriends VALUES (1, 2, 10); 
 INSERT INTO Befriends VALUES (2, 3, 23); 
@@ -345,3 +345,5 @@ INSERT INTO Challenges VALUES ('Bob', 2, '2025-01-01');
 INSERT INTO Challenges VALUES ('Joe', 1, '2025-01-05'); 
 INSERT INTO Challenges VALUES ('Joe', 2, '2025-01-05'); 
 INSERT INTO Challenges VALUES ('Joe', 3, '2025-01-06');
+
+COMMIT;
