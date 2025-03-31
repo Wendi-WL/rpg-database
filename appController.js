@@ -49,6 +49,23 @@ router.post('/update-user-guild', async (req, res) => {
     }
 });
 
+
+router.delete('/delete-player', async(req, res) => {
+    const {username} = req.body
+    const deletePlayerResult = await appService.deletePlayer(username);
+    if (deletePlayerResult) {
+        res.json({success: true});
+    } else {
+        res.status(500).json({success: false})
+    }
+})
+
+router.get('/select-player-tuples/:query', async(req, res) => {
+    query = req.params.query;
+    const selectPlayerTuples = await appService.selectPlayerTuples(query);
+    res.json({data: selectPlayerTuples});
+})
+
 router.get('/count-playertable', async (req, res) => {
     const tableCount = await appService.countPlayertable();
     if (tableCount >= 0) {
@@ -63,5 +80,8 @@ router.get('/count-playertable', async (req, res) => {
         });
     }
 });
+
+
+
 
 module.exports = router;

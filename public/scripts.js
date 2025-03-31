@@ -144,23 +144,118 @@ async function updateUserGuild(event) {
         const responseData = await response.json();
         const messageElement = document.getElementById('updateUserGuildResultMsg');
 
-            if (responseData.success) {
-                messageElement.textContent = "Success";
-                alert(`Added ${usernameValue} to ${guildNameValue}`)
-                fetchTableData();
-            } else {
-                alert("Nonexistant username or guild");
-            }
+        if (responseData.success) {
+            messageElement.textContent = "Success";
+            alert(`Added ${usernameValue} to ${guildNameValue}`)
+            fetchTableData();
+        } else {
+            alert("Nonexistant username or guild");
+        }
     } catch(error) {
         console.log(error)
     }
+}
 
+async function deletePlayer(event) {
+    event.preventDefault();
+    const usernameValue = document.getElementById("deleteUsername").value
+    const response = await fetch("/delete-player", {
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: usernameValue,
+
+        })
+    });
+    const responseData = await response.json();
+    const messageElement = document.getElementById('deletePlayerMsg');
+    if (responseData.success) {
+        messageElement.textContent = "Success";
+        alert(`Deleted ${usernameValue}`)
+        fetchTableData();
+    } else {
+        alert(`${username} not found`);
+    }
+}
+
+function addFilter() {
+    let filtersDiv = document.getElementById("filters");
+    let filterGroup = document.createElement("div");
+    filterGroup.classList.add("filter-group");
+
+    let logicalOp = document.createElement("select");
+    logicalOp.name = "logicalOp";
+    logicalOp.innerHTML = '<option value="AND">AND</option><option value="OR">OR</option>';
     
-
+    let attributeSelect = document.querySelector("select[name='attribute']").cloneNode(true);
+    let operatorSelect = document.querySelector("select[name='operator']").cloneNode(true);
+    let valueInput = document.createElement("input");
+    valueInput.type = "text";
+    valueInput.name = "value";
+    valueInput.placeholder = "Enter value";
+    
+    filterGroup.appendChild(logicalOp);
+    filterGroup.appendChild(attributeSelect);
+    filterGroup.appendChild(operatorSelect);
+    filterGroup.appendChild(valueInput);
+    
+    filtersDiv.appendChild(filterGroup);
 }
 
 
+async function selectPlayerTuples(event) {
+    event.preventDefault()
 
+    let filters = [];
+    let filterGroups = document.querySelectorAll(".filter-group");
+    console.log(filterGroups)
+    filterGroups.forEach((group, index) => {
+        let logicalOp = group.querySelector("select[name='logicalOp']")?.value || (index > 0 ? "AND" : ""); 
+        let attribute = group.querySelector("select[name='attribute']").value;
+        let operator = group.querySelector("select[name='operator']").value;
+        let value = group.querySelector("input[name='value']").value;
+
+        filters.push({ logicalOp, attribute, operator, value });
+    });
+
+    let query = ""
+    for(let i = 0; i < filters.length; i++){
+        if (i === 0){
+            query = `${filters[i].attribute} ${filters[i].operator} '${filters[i].value}'`
+        } else {
+            query = `${query} ${filters[i].logicalOp} ${filters[i].attribute} ${filters[i].operator} '${filters[i].value}'`
+        }
+        
+
+    }
+    console.log("Query is " + query)
+    
+    const response = await fetch(`/select-player-tuples/${query}`, {
+        method: 'GET',
+    });
+
+    const tableElement = document.getElementById('selecttable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const responseData = await response.json();
+
+    const tuples = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    tuples.forEach(player=> {
+        const row = tableBody.insertRow();
+        player.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -171,7 +266,11 @@ window.onload = function() {
     document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
     document.getElementById("insertPlayertable").addEventListener("submit", insertPlayertable);
     document.getElementById("updateUserGuild").addEventListener("submit", updateUserGuild);
+    document.getElementById("deletePlayer").addEventListener("submit", deletePlayer);
     document.getElementById("countPlayertable").addEventListener("click", countPlayertable);
+    document.getElementById("addFilterBtn").addEventListener("click", addFilter);
+    document.getElementById("selectForm").addEventListener("submit", selectPlayerTuples);
+    
 };
 
 // General function to refresh the displayed table data. 

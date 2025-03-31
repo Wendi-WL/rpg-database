@@ -44,8 +44,8 @@ CREATE TABLE Befriends (
     account2ID INTEGER,
     friendshipLevel INTEGER NOT NULL,
     PRIMARY KEY (account1ID, account2ID),
-    FOREIGN KEY (account1ID) REFERENCES PlayerJoins(accountID), 
-    FOREIGN KEY (account2ID) REFERENCES PlayerJoins(accountID)
+    FOREIGN KEY (account1ID) REFERENCES PlayerJoins(accountID) ON DELETE CASCADE, 
+    FOREIGN KEY (account2ID) REFERENCES PlayerJoins(accountID) ON DELETE CASCADE
 );	
 
 CREATE TABLE Mission ( 
@@ -59,7 +59,7 @@ CREATE TABLE Completes (
     missionID INTEGER, 
     completionTimestamp DATE, 
     PRIMARY KEY (accountID, missionID), 
-    FOREIGN KEY (accountID) REFERENCES PlayerJoins(accountID), 
+    FOREIGN KEY (accountID) REFERENCES PlayerJoins(accountID) ON DELETE CASCADE, 
     FOREIGN KEY (missionID) REFERENCES Mission(missionID) 
 );
 
@@ -95,7 +95,7 @@ CREATE TABLE Owns (
     accountID INTEGER, 
     name VARCHAR(16), 
     PRIMARY KEY (accountID, name), 
-    FOREIGN KEY (accountID) REFERENCES PlayerJoins(accountID), 
+    FOREIGN KEY (accountID) REFERENCES PlayerJoins(accountID) ON DELETE CASCADE, 
     FOREIGN KEY (name) REFERENCES Item(name) 
 );
 
@@ -112,7 +112,7 @@ CREATE TABLE CreatesCharacter (
     characterLevel INTEGER NOT NULL, 
     class VARCHAR(10) NOT NULL,
     playerID INTEGER UNIQUE NOT NULL, 
-    FOREIGN KEY (playerID) REFERENCES PlayerJoins(accountID) 
+    FOREIGN KEY (playerID) REFERENCES PlayerJoins(accountID) ON DELETE CASCADE
 );
 
 CREATE TABLE ArmourName (
@@ -136,7 +136,7 @@ CREATE TABLE CraftsArmour (
     name VARCHAR(16) NOT NULL, 
     boostType VARCHAR(8) NOT NULL,
     accountID INTEGER NOT NULL, 
-    FOREIGN KEY (accountID) REFERENCES PlayerJoins(accountID) 
+    FOREIGN KEY (accountID) REFERENCES PlayerJoins(accountID) ON DELETE CASCADE
 );
 
 CREATE TABLE Equips (

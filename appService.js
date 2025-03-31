@@ -140,8 +140,9 @@ async function updateUserGuild(username, guildName, guildRole) {
         }
 
         await connection.execute(
-            'UPDATE Guild SET memberCount = memberCount + 1 WHERE name = :guildName',
-            [guildName]
+            'UPDATE Guild SET memberCount = (SELECT COUNT(*) FROM PlayerJoins P WHERE p.guildName = :guildName)' ,
+            [guildName],
+            { autoCommit: true }
         )
 
         return result.rowsAffected && result.rowsAffected > 0;
@@ -152,11 +153,45 @@ async function updateUserGuild(username, guildName, guildRole) {
     })
 }
 
+async function deletePlayer(username) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            'DELETE FROM PlayerJoins WHERE username = :username',
+            [username],
+            { autoCommit: true }
+        )
+        if (result){
+            return true;
+        } else {
+            return false;
+        }
+    }).catch ((err) => {
+        console.log(err)
+        return false;
+    })
+}
+
+async function selectPlayerTuples(query) {
+    return await withOracleDB(async (connection) => {
+        const statement = `SELECT * FROM PlayerJoins WHERE ${query}`
+        console.log(statement)
+        const result = await connection.execute(
+            statement,
+        )
+        
+        return result.rows;
+        }).catch(() => {
+            return [];
+        });
+}
+
 module.exports = {
     testOracleConnection,
     insertPlayertable,
     fetchPlayertableFromDb,
     countPlayertable,
     initializeDB,
-    updateUserGuild
+    deletePlayer,
+    updateUserGuild,
+    selectPlayerTuples,
 };
