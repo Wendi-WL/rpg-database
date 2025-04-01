@@ -29,6 +29,11 @@ router.get('/playertable', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/armourtable', async (req, res) => {
+    const tableContent = await appService.fetchArmourtableFromDb();
+    res.json({data: tableContent});
+});
+
 router.post("/insert-playertable", async (req, res) => {
     const { username, email } = req.body;
     const insertResult = await appService.insertPlayertable(username, email);
@@ -64,6 +69,12 @@ router.get('/select-player-tuples/:query', async(req, res) => {
     query = req.params.query;
     const selectPlayerTuples = await appService.selectPlayerTuples(query);
     res.json({data: selectPlayerTuples});
+})
+
+router.get('/project-armour-attributes/:query', async(req, res) => {
+    query = req.params.query;
+    const armourAttributes = await appService.selectArmourTuples(query);
+    res.json({data: armourAttributes});
 })
 
 router.get('/count-playertable', async (req, res) => {

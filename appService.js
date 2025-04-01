@@ -84,7 +84,14 @@ async function fetchPlayertableFromDb() {
         return [];
     });
 }
-
+async function fetchArmourtableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM ARMOURNAME');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
 
 async function initializeDB() {
     return await withOracleDB(async (connection) => {
@@ -185,13 +192,28 @@ async function selectPlayerTuples(query) {
         });
 }
 
+async function selectArmourTuples(query) {
+    return await withOracleDB(async (connection) => {
+        const statement = `SELECT ${query} FROM ArmourName`
+        const result = await connection.execute(
+            statement,
+        )
+        
+        return result.rows;
+        }).catch(() => {
+            return [];
+        });
+}
 module.exports = {
     testOracleConnection,
     insertPlayertable,
     fetchPlayertableFromDb,
+    fetchArmourtableFromDb,
     countPlayertable,
     initializeDB,
     deletePlayer,
     updateUserGuild,
     selectPlayerTuples,
+    selectArmourTuples,
+    
 };
