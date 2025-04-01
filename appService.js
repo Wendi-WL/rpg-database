@@ -214,9 +214,9 @@ async function selectArmourTuples(query) {
             statement,
         )
         return result.rows;
-        }).catch(() => {
+    }).catch(() => {
             return [];
-        });
+    });
 }
 
 async function getMostPopularItems() {
@@ -245,5 +245,6 @@ module.exports = {
     deletePlayer,
     updateUserGuild,
     selectPlayerTuples,
-    getMostPopularItems
+    getMostPopularItems,
+    selectArmourTuples
 };
