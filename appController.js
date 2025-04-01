@@ -81,6 +81,16 @@ router.get('/count-playertable', async (req, res) => {
     }
 });
 
+router.get('/most-popular-items', async (req, res) => {
+    try {
+        const popularItems = await appService.getMostPopularItems();
+        res.json({ success: true, data: popularItems });
+    } catch (err) {
+        console.error("Error fetching most popular items:", err);
+        res.status(500).json({ success: false, message: "Failed to fetch most popular items" });
+    }
+});
+
 
 
 

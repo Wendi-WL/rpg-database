@@ -116,22 +116,7 @@
         <button type="button" id="addFilterBtn">Add Condition</button>
         <button type="submit">Search</button>
     </form>
-    <table id="selecttable" border="1">
-        <thead>
-            <tr>
-                <!--Table head, need to be adjusted accordingly to align with your own.-->
-
-                <th>AccountID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>CreateDate</th>
-                <th>Role</th>
-                <th>GuildName</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div id="selecttable" border="1"></div>
     
     <br><hr><br> <!-- ========================================================================= -->
 
@@ -140,7 +125,14 @@
     <!-- A placeholder to display the count result. -->
     <div id="countResultMsg"></div> <br>
 
-    <!-- ===================================================================================== -->
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2>Get the most popular items owned</h2>
+    <button id="popularItemsButton"> count </button> 
+    <br><br>
+    <div id="popularitemstable"></div>
+
+
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="scripts.js"></script>
 </body>

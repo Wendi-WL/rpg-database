@@ -1,17 +1,44 @@
-/*
- * These functions below are for various webpage functionalities. 
- * Each function serves to process data on the frontend:
- *      - Before sending requests to the backend.
- *      - After receiving responses from the backend.
- * 
- * To tailor them to your specific needs,
- * adjust or expand these functions to match both your 
- *   backend endpoints 
- * and 
- *   HTML structure.
- * 
- */
+// Helper Function to generate tables dynamically
+function generateTable(divId, data, cols) {
+    const container = document.getElementById(divId);
+    if (!container) {
+        console.error(`Element with ID "${divId}" not found.`);
+        return;
+    }
 
+    if (!Array.isArray(data) || data.length === 0) {
+        container.innerHTML = "<p>No data available</p>";
+        return;
+    }
+
+    // Extract column names dynamically from the first object
+    const columns = cols;
+
+    // Generate table header
+    let theadHTML = "<thead><tr>";
+    columns.forEach(col => {
+        if (col){
+            col = col.charAt(0).toUpperCase() + col.slice(1).toLowerCase();
+        }
+        theadHTML += `<th>${col}</th>`;
+    });
+    theadHTML += "</tr></thead>";
+
+    // Generate table body
+    let tbodyHTML = "<tbody>";
+    data.forEach(row => {
+        tbodyHTML += "<tr>";
+        columns.forEach((col, i) => {
+            let elem = (i < row.length)? row[i]: "N/A";
+            tbodyHTML += `<td>${elem}</td>`;
+        });
+        tbodyHTML += "</tr>";
+    });
+    tbodyHTML += "</tbody>";
+
+    // Insert table into the container
+    container.innerHTML = `<table border="1">${theadHTML}${tbodyHTML}</table>`;
+}
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
@@ -76,6 +103,9 @@ async function resetDemotable() {
         alert("Error initializing table")
     }
 }
+
+// **** QUERIES START HERE ****
+
 // Counts rows in the demotable.
 // Modify the function accordingly if using different aggregate functions or procedures.
 async function countPlayertable() {
@@ -94,6 +124,7 @@ async function countPlayertable() {
     }
 }
 
+// Inserts player tuple into PlayerJoins Table
 async function insertPlayertable(event) {
     event.preventDefault();
 
@@ -227,8 +258,6 @@ async function selectPlayerTuples(event) {
         } else {
             query = `${query} ${filters[i].logicalOp} ${filters[i].attribute} ${filters[i].operator} '${filters[i].value}'`
         }
-        
-
     }
     console.log("Query is " + query)
     
@@ -237,25 +266,26 @@ async function selectPlayerTuples(event) {
     });
 
     const tableElement = document.getElementById('selecttable');
-    const tableBody = tableElement.querySelector('tbody');
+    // const tableBody = tableElement.querySelector('tbody');
 
     const responseData = await response.json();
 
     const tuples = responseData.data;
 
-    // Always clear old, already fetched data before new fetching process.
-    if (tableBody) {
-        tableBody.innerHTML = '';
-    }
-
-    tuples.forEach(player=> {
-        const row = tableBody.insertRow();
-        player.forEach((field, index) => {
-            const cell = row.insertCell(index);
-            cell.textContent = field;
-        });
-    });
+    generateTable('selecttable', tuples, ['Account ID', 'Username', 'Email', 'Date created:', 'Role', 'Guild Name'])
 }
+
+// Function to get most popular items from Owns table
+async function selectMostPopularItems() {
+    const res = await fetch(`/most-popular-items`, { method: 'GET' });
+    const jsonData = await res.json(); 
+    console.log("rows", jsonData.data.rows)
+    generateTable('popularitemstable', jsonData.data, ['item', 'Number of Owners'])
+}
+
+
+
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -270,7 +300,7 @@ window.onload = function() {
     document.getElementById("countPlayertable").addEventListener("click", countPlayertable);
     document.getElementById("addFilterBtn").addEventListener("click", addFilter);
     document.getElementById("selectForm").addEventListener("submit", selectPlayerTuples);
-    
+    document.getElementById("popularItemsButton").addEventListener("click", selectMostPopularItems);
 };
 
 // General function to refresh the displayed table data. 
