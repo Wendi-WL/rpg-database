@@ -97,13 +97,11 @@ async function initializeDB() {
     return await withOracleDB(async (connection) => {
         const initsql = fs.readFileSync('initschema.sql', 'utf8'); 
         const statements = initsql.split(/;\s*$/m); 
-        console.log("split")
         for (let stmt of statements) {
             if (stmt.trim()) {
                 await connection.execute(stmt); 
             }
         }
-        console.log("success")
         return true;
     }).catch ((err) => {
         console.log(stmt, err)
@@ -114,7 +112,7 @@ async function initializeDB() {
 async function insertPlayertable(username, email) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            'INSERT INTO PlayerJoins (accountID, username, email, createDate, role, guildName) VALUES (player_seq.NEXTVAL, :username, :email, SYSDATE, NULL, NULL)',
+            'INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, :username, :email, SYSDATE, NULL, NULL)',
             [username, email],
             { autoCommit: true }
         );
