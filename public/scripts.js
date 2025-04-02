@@ -213,6 +213,7 @@ async function updateUserGuild(event) {
     }
 }
 
+// deletes a player when given a username
 async function deletePlayer(event) {
     event.preventDefault();
     const usernameValue = document.getElementById("deleteUsername").value
@@ -261,7 +262,7 @@ function addFilter() {
     filtersDiv.appendChild(filterGroup);
 }
 
-
+// Selection of player tuples
 async function selectPlayerTuples(event) {
     event.preventDefault()
 
@@ -309,10 +310,7 @@ async function selectMostPopularItems() {
     generateTable('popularitemstable', jsonData.data, ['item', 'Number of Owners'])
 }
 
-
-
-
-
+// Function to project the armour attributes
 async function projectArmourAttributes(event) {
     event.preventDefault();
     const form = document.getElementById("armourForm");
@@ -351,6 +349,34 @@ async function projectArmourAttributes(event) {
     });
 }
 
+// function that joins playerjoins and craftsamour to find a user's armour
+async function findUserArmour(event){
+    event.preventDefault();
+    const tableElement = document.getElementById('userArmourTable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const usernameValue = document.getElementById("findArmour").value
+    const response = await fetch(`/find-user-armour/${usernameValue}`, {
+        method: "GET",
+    });
+
+    const responseData = await response.json();
+    console.log(responseData)
+    const armourContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    armourContent.forEach(player=> {
+        const row = tableBody.insertRow();
+        player.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -364,7 +390,9 @@ window.onload = function() {
     document.getElementById("countPlayertable").addEventListener("click", countPlayertable);
     document.getElementById("addFilterBtn").addEventListener("click", addFilter);
     document.getElementById("selectForm").addEventListener("submit", selectPlayerTuples);
-    document.getElementById("popularItemsButton").addEventListener("click", selectMostPopularItems);document.getElementById("armourForm").addEventListener("submit", projectArmourAttributes);
+    document.getElementById("popularItemsButton").addEventListener("click", selectMostPopularItems);
+    document.getElementById("armourForm").addEventListener("submit", projectArmourAttributes);
+    document.getElementById("userArmour").addEventListener("submit", findUserArmour);
 };
 
 // General function to refresh the displayed table data. 

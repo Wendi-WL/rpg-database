@@ -233,6 +233,24 @@ async function getMostPopularItems() {
     });
 }
 
+async function getUserArmour(username) {
+    return await withOracleDB(async( connection) => {
+        const result = await connection.execute(
+            `SELECT armourID, boostType, name
+             FROM PlayerJoins PJ
+             INNER JOIN CraftsArmour CA
+             ON PJ.accountID = CA.accountID
+             WHERE PJ.username = :username`,
+             [username],
+             {autoCommit: true}
+        )
+        return result.rows;
+    }).catch((err) => {
+        console.error("Error finding username:", err);
+        return [];
+    });
+}
+
 module.exports = {
     testOracleConnection,
     insertPlayertable,
@@ -244,5 +262,6 @@ module.exports = {
     updateUserGuild,
     selectPlayerTuples,
     getMostPopularItems,
-    selectArmourTuples
+    selectArmourTuples,
+    getUserArmour,
 };
