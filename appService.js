@@ -97,13 +97,11 @@ async function initializeDB() {
     return await withOracleDB(async (connection) => {
         const initsql = fs.readFileSync('initschema.sql', 'utf8'); 
         const statements = initsql.split(/;\s*$/m); 
-        console.log("split")
         for (let stmt of statements) {
             if (stmt.trim()) {
                 await connection.execute(stmt); 
             }
         }
-        console.log("success")
         return true;
     }).catch ((err) => {
         console.log(stmt, err)
@@ -114,7 +112,7 @@ async function initializeDB() {
 async function insertPlayertable(username, email) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            'INSERT INTO PlayerJoins (accountID, username, email, createDate, role, guildName) VALUES (player_seq.NEXTVAL, :username, :email, SYSDATE, NULL, NULL)',
+            'INSERT INTO PlayerJoins VALUES (player_seq.NEXTVAL, :username, :email, SYSDATE, NULL, NULL)',
             [username, email],
             { autoCommit: true }
         );
@@ -274,6 +272,24 @@ async function getGuildsWithAboveAverageFriendship() {
     });
 }
 
+async function getUserArmour(username) {
+    return await withOracleDB(async( connection) => {
+        const result = await connection.execute(
+            `SELECT armourID, boostType, name
+             FROM PlayerJoins PJ
+             INNER JOIN CraftsArmour CA
+             ON PJ.accountID = CA.accountID
+             WHERE PJ.username = :username`,
+             [username],
+             {autoCommit: true}
+        )
+        return result.rows;
+    }).catch((err) => {
+        console.error("Error finding username:", err);
+        return [];
+    });
+}
+
 module.exports = {
     testOracleConnection,
     insertPlayertable,
@@ -287,5 +303,6 @@ module.exports = {
     getMostPopularItems,
     selectArmourTuples,
     getGuildsWithMoreThanTwoMembers,
-    getGuildsWithAboveAverageFriendship
+    getGuildsWithAboveAverageFriendship,
+    getUserArmour,
 };

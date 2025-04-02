@@ -122,6 +122,21 @@ router.get('/guilds-with-good-friendship', async (req, res) => {
     }
 })
 
+router.get('/find-user-armour/:query', async(req, res) => {
+    const username = req.params.query;
+    try {
+        const armour = await appService.getUserArmour(username);
+        console.log("success")
+        res.json({success: true, data: armour});
+
+
+    } catch (err) {
+        console.error("Error finding username: ", err);
+        res.status(500).json({ success: false, message: "Failed to find username" });
+    }
+})
+
+
 
 
 module.exports = router;
