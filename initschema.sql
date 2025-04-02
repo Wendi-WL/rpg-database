@@ -36,7 +36,7 @@ CREATE TABLE PlayerJoins (
     createDate DATE, 
     role VARCHAR(255), 
     guildName VARCHAR(16), 
-    FOREIGN KEY (guildName) REFERENCES Guild(name) 
+    FOREIGN KEY (guildName) REFERENCES Guild(name) ON DELETE SET NULL
 );
 
 CREATE TABLE Befriends (
@@ -60,7 +60,7 @@ CREATE TABLE Completes (
     completionTimestamp DATE, 
     PRIMARY KEY (accountID, missionID), 
     FOREIGN KEY (accountID) REFERENCES PlayerJoins(accountID) ON DELETE CASCADE, 
-    FOREIGN KEY (missionID) REFERENCES Mission(missionID) 
+    FOREIGN KEY (missionID) REFERENCES Mission(missionID) ON DELETE CASCADE
 );
 
 CREATE TABLE Item (
@@ -81,14 +81,14 @@ CREATE TABLE Consumable (
     rarity VARCHAR(16) NOT NULL, 
     boostType VARCHAR(8) NOT NULL, 
     PRIMARY KEY (name), 
-    FOREIGN KEY (name) REFERENCES Item(name)
+    FOREIGN KEY (name) REFERENCES Item(name) ON DELETE CASCADE
 );
 
 CREATE TABLE Collectible (
     name VARCHAR(16),
     obtainedFrom VARCHAR(255), 
     PRIMARY KEY (name), 
-    FOREIGN KEY (name) REFERENCES Item(name) 
+    FOREIGN KEY (name) REFERENCES Item(name) ON DELETE CASCADE
 );
 
 CREATE TABLE Owns ( 
@@ -96,7 +96,7 @@ CREATE TABLE Owns (
     name VARCHAR(16), 
     PRIMARY KEY (accountID, name), 
     FOREIGN KEY (accountID) REFERENCES PlayerJoins(accountID) ON DELETE CASCADE, 
-    FOREIGN KEY (name) REFERENCES Item(name) 
+    FOREIGN KEY (name) REFERENCES Item(name) ON DELETE CASCADE
 );
 
 CREATE TABLE CharacterStats ( 
@@ -142,15 +142,15 @@ CREATE TABLE CraftsArmour (
 CREATE TABLE Equips (
     armourID INTEGER PRIMARY KEY, 
     characterName VARCHAR(16), 
-    FOREIGN KEY (armourID) REFERENCES CraftsArmour(armourID),
-    FOREIGN KEY (characterName) REFERENCES CreatesCharacter(name) 
+    FOREIGN KEY (armourID) REFERENCES CraftsArmour(armourID) ON DELETE CASCADE,
+    FOREIGN KEY (characterName) REFERENCES CreatesCharacter(name) ON DELETE CASCADE
 );
 
 CREATE TABLE LearnsSkill (
     name VARCHAR(255) PRIMARY KEY, 
     effect VARCHAR(64), 
     characterName VARCHAR(16), 
-    FOREIGN KEY (characterName) REFERENCES CreatesCharacter(name) 
+    FOREIGN KEY (characterName) REFERENCES CreatesCharacter(name) ON DELETE CASCADE
 );
 
 CREATE TABLE QuestLocation ( 
@@ -168,7 +168,7 @@ CREATE TABLE HaveStage (
     objective VARCHAR(255), 
     questID INTEGER, 
     PRIMARY KEY (stageID, questID),
-    FOREIGN KEY (questID) REFERENCES QuestInfo(questID) 
+    FOREIGN KEY (questID) REFERENCES QuestInfo(questID) ON DELETE CASCADE
 );
 
 CREATE TABLE Challenges ( 
@@ -176,8 +176,8 @@ CREATE TABLE Challenges (
     questID INTEGER, 
     attemptTimestamp DATE, 
     PRIMARY KEY (characterName, questID), 
-    FOREIGN KEY (characterName) REFERENCES CreatesCharacter(name), 
-    FOREIGN KEY (questID) REFERENCES QuestInfo(questID)
+    FOREIGN KEY (characterName) REFERENCES CreatesCharacter(name) ON DELETE CASCADE, 
+    FOREIGN KEY (questID) REFERENCES QuestInfo(questID) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE player_seq
