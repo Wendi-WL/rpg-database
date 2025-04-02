@@ -309,6 +309,21 @@ async function selectMostPopularItems() {
     generateTable('popularitemstable', jsonData.data, ['item', 'Number of Owners'])
 }
 
+// Function to get guilds with > 2 members
+async function selectGuildsWithMembers() {
+    const res = await fetch(`/guilds-with-two-members`, { method: 'GET' });
+    const jsonData = await res.json(); 
+    console.log("rows", jsonData.data.rows)
+    generateTable('guildtwotable', jsonData.data, ['Guild Name', 'Total Members'])
+}
+
+// Function to get guilds with above average friendship level
+async function selectGuildsWithAboveAverageFriendship() {
+    const res = await fetch(`/guilds-with-good-friendship`, { method: 'GET' });
+    const jsonData = await res.json(); 
+    console.log("rows", jsonData.data.rows)
+    generateTable('guildfriendshiptable', jsonData.data, ['Guild Name', 'Friendship Level', 'Difference From Mean'])
+}
 
 
 
@@ -364,7 +379,10 @@ window.onload = function() {
     document.getElementById("countPlayertable").addEventListener("click", countPlayertable);
     document.getElementById("addFilterBtn").addEventListener("click", addFilter);
     document.getElementById("selectForm").addEventListener("submit", selectPlayerTuples);
-    document.getElementById("popularItemsButton").addEventListener("click", selectMostPopularItems);document.getElementById("armourForm").addEventListener("submit", projectArmourAttributes);
+    document.getElementById("popularItemsButton").addEventListener("click", selectMostPopularItems);
+    document.getElementById("armourForm").addEventListener("submit", projectArmourAttributes);
+    document.getElementById("guildswithtwoButton").addEventListener("click", selectGuildsWithMembers);
+    document.getElementById("guildswithfriendshipButton").addEventListener('click', selectGuildsWithAboveAverageFriendship);
 };
 
 // General function to refresh the displayed table data. 

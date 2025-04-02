@@ -102,6 +102,25 @@ router.get('/most-popular-items', async (req, res) => {
     }
 });
 
+router.get('/guilds-with-two-members', async (req, res) => {
+    try {
+        const data = await appService.getGuildsWithMoreThanTwoMembers();
+        res.json({ success: true, data: data});
+    } catch(err) {
+        console.error("Error fetching guilds with two or more members", err);
+        res.status(500).json({ success: false, message: "Failed to fetch guilds" });
+    }
+})
+
+router.get('/guilds-with-good-friendship', async (req, res) => {
+    try {
+        const data = await appService.getGuildsWithAboveAverageFriendship();
+        res.json({ success: true, data: data});
+    } catch(err) {
+        console.error("Error fetching guilds with above average friendship", err);
+        res.status(500).json({ success: false, message: "Failed to fetch guilds" });
+    }
+})
 
 
 
