@@ -232,7 +232,6 @@ async function getMostPopularItems() {
         return [];
     });
 }
-
 async function getGuildsWithMoreThanTwoMembers() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -271,7 +270,6 @@ async function getGuildsWithAboveAverageFriendship() {
         return [];
     });
 }
-
 async function getUserArmour(username) {
     return await withOracleDB(async( connection) => {
         const result = await connection.execute(
@@ -302,7 +300,7 @@ module.exports = {
     selectPlayerTuples,
     getMostPopularItems,
     selectArmourTuples,
+    getUserArmour,
     getGuildsWithMoreThanTwoMembers,
     getGuildsWithAboveAverageFriendship,
-    getUserArmour,
 };

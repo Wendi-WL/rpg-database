@@ -281,6 +281,7 @@ async function selectPlayerTuples(event) {
     let query = ""
     for(let i = 0; i < filters.length; i++){
         if (i === 0){
+            // query sanitized here
             query = `${filters[i].attribute} ${filters[i].operator} '${filters[i].value}'`
         } else {
             query = `${query} ${filters[i].logicalOp} ${filters[i].attribute} ${filters[i].operator} '${filters[i].value}'`
@@ -300,14 +301,11 @@ async function selectPlayerTuples(event) {
     const tuples = responseData.data;
 
     generateTable('selecttable', tuples, ['Account ID', 'Username', 'Email', 'Date created:', 'Role', 'Guild Name'])
-}
-
-// Function to get most popular items from Owns table
-async function selectMostPopularItems() {
-    const res = await fetch(`/most-popular-items`, { method: 'GET' });
-    const jsonData = await res.json(); 
-    console.log("rows", jsonData.data.rows)
-    generateTable('popularitemstable', jsonData.data, ['item', 'Number of Owners'])
+    if (responseData.data.length != 0){
+        alert("Player(s) found")
+    } else {
+        alert("No player(s) found")
+    }
 }
 
 // Function to get guilds with > 2 members
@@ -325,6 +323,15 @@ async function selectGuildsWithAboveAverageFriendship() {
     console.log("rows", jsonData.data.rows)
     generateTable('guildfriendshiptable', jsonData.data, ['Guild Name', 'Friendship Level', 'Difference From Mean'])
 }
+
+// Function to get most popular items from Owns table
+async function selectMostPopularItems() {
+    const res = await fetch(`/most-popular-items`, { method: 'GET' });
+    const jsonData = await res.json(); 
+    console.log("rows", jsonData.data.rows)
+    generateTable('popularitemstable', jsonData.data, ['item', 'Number of Owners'])
+}
+
 // Function to project the armour attributes
 async function projectArmourAttributes(event) {
     event.preventDefault();
@@ -395,7 +402,6 @@ window.onload = function() {
     document.getElementById("addFilterBtn").addEventListener("click", addFilter);
     document.getElementById("selectForm").addEventListener("submit", selectPlayerTuples);
     document.getElementById("popularItemsButton").addEventListener("click", selectMostPopularItems);
-    
     document.getElementById("armourForm").addEventListener("submit", projectArmourAttributes);
     document.getElementById("guildswithtwoButton").addEventListener("click", selectGuildsWithMembers);
     document.getElementById("guildswithfriendshipButton").addEventListener('click', selectGuildsWithAboveAverageFriendship);
