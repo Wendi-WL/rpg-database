@@ -351,6 +351,40 @@ async function projectArmourAttributes(event) {
     });
 }
 
+async function dividePlayerCompletesMissions(event) {
+    event.preventDefault();
+    const form = document.getElementById("missionForm");
+    const checkboxes = form.querySelectorAll("input[type='checkbox']:checked");
+
+    const selectedMissions = Array.from(checkboxes).map(cb => cb.value);
+    
+    const response = await fetch(`/players-missions-completed-division`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ missions: selectedMissions })
+    });
+
+    const responseData = await response.json();
+
+    const tableElement = document.getElementById('divisionTable');
+    const tableHead = tableElement.querySelector('thead');
+    const tableBody = tableElement.querySelector('tbody');
+
+    tableBody.innerHTML = "";
+
+    const tuples = responseData.data;
+
+    tuples.forEach(player => {
+        const row = tableBody.insertRow();
+        player.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -364,7 +398,9 @@ window.onload = function() {
     document.getElementById("countPlayertable").addEventListener("click", countPlayertable);
     document.getElementById("addFilterBtn").addEventListener("click", addFilter);
     document.getElementById("selectForm").addEventListener("submit", selectPlayerTuples);
-    document.getElementById("popularItemsButton").addEventListener("click", selectMostPopularItems);document.getElementById("armourForm").addEventListener("submit", projectArmourAttributes);
+    document.getElementById("popularItemsButton").addEventListener("click", selectMostPopularItems);
+    document.getElementById("armourForm").addEventListener("submit", projectArmourAttributes);
+    document.getElementById("missionForm").addEventListener("submit", dividePlayerCompletesMissions);
 };
 
 // General function to refresh the displayed table data. 

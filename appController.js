@@ -102,7 +102,20 @@ router.get('/most-popular-items', async (req, res) => {
     }
 });
 
+router.post('/players-missions-completed-division', async (req, res) => {
+    try {
+        const { missions } = req.body;  // Retrieve missions array from the request body
 
+        if (!Array.isArray(missions)) {
+            return res.status(400).json({ success: false, message: "Missions must be an array" });
+        }
 
+        const playersCompletingAllMissions = await appService.getPlayersMissionsCompletedDivision(missions);
+        res.json({ success: true, data: playersCompletingAllMissions });
+    } catch (err) {
+        console.error("Error fetching players completing all given missions:", err);
+        res.status(500).json({ success: false, message: "Failed to fetch players completing all given missions" });
+    }
+});
 
 module.exports = router;

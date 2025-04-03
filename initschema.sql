@@ -216,8 +216,17 @@ INSERT INTO Mission VALUES (105, 'finish all quests', '100000 coins');
 INSERT INTO Completes VALUES (1, 101, '2025-01-01'); 
 INSERT INTO Completes VALUES (1, 102, '2025-01-01'); 
 INSERT INTO Completes VALUES (1, 103, '2025-01-05'); 
+INSERT INTO Completes VALUES (1, 104, '2025-01-05'); 
+INSERT INTO Completes VALUES (1, 105, '2025-01-05'); 
+INSERT INTO Completes VALUES (2, 101, '2025-01-01'); 
+INSERT INTO Completes VALUES (2, 103, '2025-01-05'); 
 INSERT INTO Completes VALUES (2, 104, '2025-01-05'); 
-INSERT INTO Completes VALUES (3, 104, '2025-02-05');
+INSERT INTO Completes VALUES (3, 101, '2025-01-01'); 
+INSERT INTO Completes VALUES (3, 103, '2025-02-05');
+INSERT INTO Completes VALUES (5, 101, '2025-02-22'); 
+INSERT INTO Completes VALUES (5, 103, '2025-02-22'); 
+INSERT INTO Completes VALUES (7, 103, '2025-02-25'); 
+INSERT INTO Completes VALUES (8, 103, '2025-02-25'); 
 
 INSERT INTO Item VALUES ('Bracelet', 'A token of your friendship'); 
 INSERT INTO Item VALUES ('Crown', 'Reward for defeating your first boss'); 
@@ -248,7 +257,6 @@ INSERT INTO Consumable VALUES ('Strength potion', 2, 'rare', 'attack');
 INSERT INTO Consumable VALUES ('Healing Herb', 3, 'rare', 'health'); 
 INSERT INTO Consumable VALUES ('Energy Drink', 4, 'common', 'stamina'); 
 INSERT INTO Consumable VALUES ('Elixir of Wisdom', 1, 'legendary', 'mana');
-
 
 INSERT INTO Collectible VALUES ('Bracelet', 'Mission reward'); 
 INSERT INTO Collectible VALUES ('Crown', 'Mission reward');
