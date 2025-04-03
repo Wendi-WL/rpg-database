@@ -281,6 +281,7 @@ async function selectPlayerTuples(event) {
     let query = ""
     for(let i = 0; i < filters.length; i++){
         if (i === 0){
+            // query sanitized here
             query = `${filters[i].attribute} ${filters[i].operator} '${filters[i].value}'`
         } else {
             query = `${query} ${filters[i].logicalOp} ${filters[i].attribute} ${filters[i].operator} '${filters[i].value}'`
@@ -300,6 +301,11 @@ async function selectPlayerTuples(event) {
     const tuples = responseData.data;
 
     generateTable('selecttable', tuples, ['Account ID', 'Username', 'Email', 'Date created:', 'Role', 'Guild Name'])
+    if (responseData.data.length != 0){
+        alert("Player(s) found")
+    } else {
+        alert("No player(s) found")
+    }
 }
 
 // Function to get most popular items from Owns table
@@ -310,21 +316,6 @@ async function selectMostPopularItems() {
     generateTable('popularitemstable', jsonData.data, ['item', 'Number of Owners'])
 }
 
-// Function to get guilds with > 2 members
-async function selectGuildsWithMembers() {
-    const res = await fetch(`/guilds-with-two-members`, { method: 'GET' });
-    const jsonData = await res.json(); 
-    console.log("rows", jsonData.data.rows)
-    generateTable('guildtwotable', jsonData.data, ['Guild Name', 'Total Members'])
-}
-
-// Function to get guilds with above average friendship level
-async function selectGuildsWithAboveAverageFriendship() {
-    const res = await fetch(`/guilds-with-good-friendship`, { method: 'GET' });
-    const jsonData = await res.json(); 
-    console.log("rows", jsonData.data.rows)
-    generateTable('guildfriendshiptable', jsonData.data, ['Guild Name', 'Friendship Level', 'Difference From Mean'])
-}
 // Function to project the armour attributes
 async function projectArmourAttributes(event) {
     event.preventDefault();
@@ -390,6 +381,12 @@ async function findUserArmour(event){
             cell.textContent = field;
         });
     });
+    if (responseData.data.length != 0){
+        alert("User found")
+    } else {
+        alert("User not found or no armour crafted")
+    }
+
 }
 
 // ---------------------------------------------------------------
@@ -406,10 +403,7 @@ window.onload = function() {
     document.getElementById("addFilterBtn").addEventListener("click", addFilter);
     document.getElementById("selectForm").addEventListener("submit", selectPlayerTuples);
     document.getElementById("popularItemsButton").addEventListener("click", selectMostPopularItems);
-    
     document.getElementById("armourForm").addEventListener("submit", projectArmourAttributes);
-    document.getElementById("guildswithtwoButton").addEventListener("click", selectGuildsWithMembers);
-    document.getElementById("guildswithfriendshipButton").addEventListener('click', selectGuildsWithAboveAverageFriendship);
     document.getElementById("userArmour").addEventListener("submit", findUserArmour);
 };
 
