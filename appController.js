@@ -58,6 +58,7 @@ router.post('/update-user-guild', async (req, res) => {
 router.delete('/delete-player', async(req, res) => {
     const {username} = req.body
     const deletePlayerResult = await appService.deletePlayer(username);
+    console.log(deletePlayerResult)
     if (deletePlayerResult) {
         res.json({success: true});
     } else {
@@ -80,10 +81,12 @@ router.get('/select-player-tuples/:query', async(req, res) => {
 
 router.get('/project-armour-attributes/:query', async(req, res) => {
     query = req.params.query;
-    
-    const queryRegex = /^(name|Rarity|EquipType|BoostType)(,(name|Rarity|EquipType|BoostType))*$/;
+    // console.log(query)
+    const queryRegex = /^(name|Rarity|EquipType|BoostType)(\s*,\s*(name|Rarity|EquipType|BoostType))*$/;
+
     // Validate the query against the regex
     if (!queryRegex.test(query)) {
+        // console.log("ERRORORORO!!!")
         return res.status(400).json({ success: false, message: "Invalid query format" });
     }
     const armourAttributes = await appService.selectArmourTuples(query);

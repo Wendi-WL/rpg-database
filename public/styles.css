@@ -84,3 +84,31 @@ input::placeholder, textarea::placeholder {
     height: 1em;
     vertical-align: middle;
 }
+
+#dbStatus {
+    color: green;
+}
+
+
+
+#missionForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between rows */
+    max-width: 50%;
+  }
+
+.mission-item {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between checkbox and label */
+}
+
+input[type="checkbox"] {
+    width: auto; /* Prevents checkbox from stretching */
+    height: 16px;
+    cursor: pointer;
+    margin: 0; /* Ensures no extra spacing */
+  }
+
+

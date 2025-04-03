@@ -234,7 +234,8 @@ async function deletePlayer(event) {
         alert(`Deleted ${usernameValue}`)
         fetchTableData();
     } else {
-        alert(`${username} not found`);
+        alert(`${usernameValue} not found`);
+        messageElement.textContent = "Fail";
     }
 }
 

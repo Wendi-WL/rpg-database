@@ -164,17 +164,15 @@ async function deletePlayer(username) {
             'DELETE FROM PlayerJoins WHERE username = :username',
             [username],
             { autoCommit: true }
-        )
-        if (result){
-            return true;
-        } else {
-            return false;
-        }
-    }).catch ((err) => {
-        console.log(err)
+        );
+
+        return result.rowsAffected > 0; // Returns true only if a row was deleted
+    }).catch((err) => {
+        console.log(err);
         return false;
-    })
+    });
 }
+
 
 async function selectPlayerTuples(query) {
     return await withOracleDB(async (connection) => {
