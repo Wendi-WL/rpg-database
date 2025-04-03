@@ -273,6 +273,49 @@ async function getUserArmour(username) {
     });
 }
 
+async function getPlayersMissionsCompletedDivision(missions) {
+    return await withOracleDB(async (connection) => {
+        console.log(missions)
+        const viewName = "GivenMissions";
+        let view = `CREATE VIEW ${viewName}(missionID) AS
+                    SELECT missionID
+                    FROM Mission
+                    WHERE `;
+
+        if (!missions || missions.length === 0) {
+            view += "1=0"; // No missions to include
+        } else {
+            const conditions = missions.map((missionID) => `missionID = ${missionID}`);
+            view += conditions.join(" OR ");
+        }
+
+        console.log(view)
+        console.log(view.rows)
+
+        // Execute the view creation
+        await connection.execute(view);
+
+        // Perform the main query
+        const result = await connection.execute(
+            `SELECT accountID, username FROM PlayerJoins PJ
+             WHERE NOT EXISTS (
+                (SELECT missionID 
+                 FROM ${viewName})
+                MINUS
+                (SELECT DISTINCT missionID
+                 FROM Completes C
+                 WHERE PJ.accountID = C.accountID)
+             )`
+        );
+        console.log(result)
+        await connection.execute(`DROP VIEW ${viewName}`);
+        return result.rows;
+    }).catch((err) => {
+        console.error("Error finding players that have completed all of the given missions:", err);
+        return [];
+    });
+}
+
 module.exports = {
     testOracleConnection,
     insertPlayertable,
@@ -288,4 +331,5 @@ module.exports = {
     getUserArmour,
     getGuildsWithMoreThanTwoMembers,
     getGuildsWithAboveAverageFriendship,
+    getPlayersMissionsCompletedDivision
 };

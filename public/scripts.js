@@ -371,6 +371,40 @@ async function projectArmourAttributes(event) {
     });
 }
 
+async function dividePlayerCompletesMissions(event) {
+    event.preventDefault();
+    const form = document.getElementById("missionForm");
+    const checkboxes = form.querySelectorAll("input[type='checkbox']:checked");
+
+    const selectedMissions = Array.from(checkboxes).map(cb => cb.value);
+    
+    const response = await fetch(`/players-missions-completed-division`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ missions: selectedMissions })
+    });
+
+    const responseData = await response.json();
+
+    const tableElement = document.getElementById('divisionTable');
+    const tableHead = tableElement.querySelector('thead');
+    const tableBody = tableElement.querySelector('tbody');
+
+    tableBody.innerHTML = "";
+
+    const tuples = responseData.data;
+
+    tuples.forEach(player => {
+        const row = tableBody.insertRow();
+        player.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
 // function that joins playerjoins and craftsamour to find a user's armour
 async function findUserArmour(event){
     event.preventDefault();
@@ -406,6 +440,7 @@ window.onload = function() {
     document.getElementById("guildswithtwoButton").addEventListener("click", selectGuildsWithMembers);
     document.getElementById("guildswithfriendshipButton").addEventListener('click', selectGuildsWithAboveAverageFriendship);
     document.getElementById("userArmour").addEventListener("submit", findUserArmour);
+    document.getElementById("missionForm").addEventListener("submit", dividePlayerCompletesMissions);
 };
 
 // General function to refresh the displayed table data. 
