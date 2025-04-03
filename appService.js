@@ -183,26 +183,11 @@ async function selectPlayerTuples(query) {
         const result = await connection.execute(
             statement,
         )
+        console.log(result);
         return result.rows;
         }).catch(() => {
             return [];
         });
-}
-
-async function getMostPopularItems() {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute(
-            `SELECT name AS itemName, COUNT(*) AS ownershipCount
-             FROM Owns
-             GROUP BY name
-             ORDER BY ownershipCount DESC`,
-        );
-        // const columnNames = result.metaData.map(col => col.name); 
-        return result.rows;
-    }).catch((err) => {
-        console.error("Error fetching most popular items:", err);
-        return [];
-    });
 }
 
 async function selectArmourTuples(query) {
