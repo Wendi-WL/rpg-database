@@ -378,18 +378,7 @@ async function findUserArmour(event){
     const responseData = await response.json();
     console.log(responseData)
     const armourContent = responseData.data;
-
-    if (tableBody) {
-        tableBody.innerHTML = '';
-    }
-
-    armourContent.forEach(player=> {
-        const row = tableBody.insertRow();
-        player.forEach((field, index) => {
-            const cell = row.insertCell(index);
-            cell.textContent = field;
-        });
-    });
+    generateTable('userArmourTable', armourContent, ['Armour ID', 'Boost Type', 'Armour Name'])
 }
 
 // ---------------------------------------------------------------
