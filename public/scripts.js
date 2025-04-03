@@ -213,6 +213,7 @@ async function updateUserGuild(event) {
     }
 }
 
+// deletes a player when given a username
 async function deletePlayer(event) {
     event.preventDefault();
     const usernameValue = document.getElementById("deleteUsername").value
@@ -261,7 +262,7 @@ function addFilter() {
     filtersDiv.appendChild(filterGroup);
 }
 
-
+// Selection of player tuples
 async function selectPlayerTuples(event) {
     event.preventDefault()
 
@@ -280,6 +281,7 @@ async function selectPlayerTuples(event) {
     let query = ""
     for(let i = 0; i < filters.length; i++){
         if (i === 0){
+            // query sanitized here
             query = `${filters[i].attribute} ${filters[i].operator} '${filters[i].value}'`
         } else {
             query = `${query} ${filters[i].logicalOp} ${filters[i].attribute} ${filters[i].operator} '${filters[i].value}'`
@@ -299,6 +301,27 @@ async function selectPlayerTuples(event) {
     const tuples = responseData.data;
 
     generateTable('selecttable', tuples, ['Account ID', 'Username', 'Email', 'Date created:', 'Role', 'Guild Name'])
+    if (responseData.data.length != 0){
+        alert("Player(s) found")
+    } else {
+        alert("No player(s) found")
+    }
+}
+
+// Function to get guilds with > 2 members
+async function selectGuildsWithMembers() {
+    const res = await fetch(`/guilds-with-two-members`, { method: 'GET' });
+    const jsonData = await res.json(); 
+    console.log("rows", jsonData.data.rows)
+    generateTable('guildtwotable', jsonData.data, ['Guild Name', 'Total Members'])
+}
+
+// Function to get guilds with above average friendship level
+async function selectGuildsWithAboveAverageFriendship() {
+    const res = await fetch(`/guilds-with-good-friendship`, { method: 'GET' });
+    const jsonData = await res.json(); 
+    console.log("rows", jsonData.data.rows)
+    generateTable('guildfriendshiptable', jsonData.data, ['Guild Name', 'Friendship Level', 'Difference From Mean'])
 }
 
 // Function to get most popular items from Owns table
@@ -309,10 +332,7 @@ async function selectMostPopularItems() {
     generateTable('popularitemstable', jsonData.data, ['item', 'Number of Owners'])
 }
 
-
-
-
-
+// Function to project the armour attributes
 async function projectArmourAttributes(event) {
     event.preventDefault();
     const form = document.getElementById("armourForm");
@@ -385,6 +405,23 @@ async function dividePlayerCompletesMissions(event) {
     });
 }
 
+// function that joins playerjoins and craftsamour to find a user's armour
+async function findUserArmour(event){
+    event.preventDefault();
+    const tableElement = document.getElementById('userArmourTable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const usernameValue = document.getElementById("findArmour").value
+    const response = await fetch(`/find-user-armour/${usernameValue}`, {
+        method: "GET",
+    });
+
+    const responseData = await response.json();
+    console.log(responseData)
+    const armourContent = responseData.data;
+    generateTable('userArmourTable', armourContent, ['Armour ID', 'Boost Type', 'Armour Name'])
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -400,6 +437,9 @@ window.onload = function() {
     document.getElementById("selectForm").addEventListener("submit", selectPlayerTuples);
     document.getElementById("popularItemsButton").addEventListener("click", selectMostPopularItems);
     document.getElementById("armourForm").addEventListener("submit", projectArmourAttributes);
+    document.getElementById("guildswithtwoButton").addEventListener("click", selectGuildsWithMembers);
+    document.getElementById("guildswithfriendshipButton").addEventListener('click', selectGuildsWithAboveAverageFriendship);
+    document.getElementById("userArmour").addEventListener("submit", findUserArmour);
     document.getElementById("missionForm").addEventListener("submit", dividePlayerCompletesMissions);
 };
 

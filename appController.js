@@ -102,10 +102,43 @@ router.get('/most-popular-items', async (req, res) => {
     }
 });
 
+router.get('/guilds-with-two-members', async (req, res) => {
+    try {
+        const data = await appService.getGuildsWithMoreThanTwoMembers();
+        res.json({ success: true, data: data});
+    } catch(err) {
+        console.error("Error fetching guilds with two or more members", err);
+        res.status(500).json({ success: false, message: "Failed to fetch guilds" });
+    }
+})
+
+router.get('/guilds-with-good-friendship', async (req, res) => {
+    try {
+        const data = await appService.getGuildsWithAboveAverageFriendship();
+        res.json({ success: true, data: data});
+    } catch(err) {
+        console.error("Error fetching guilds with above average friendship", err);
+        res.status(500).json({ success: false, message: "Failed to fetch guilds" });
+    }
+})
+
+router.get('/find-user-armour/:query', async(req, res) => {
+    const username = req.params.query;
+    try {
+        const armour = await appService.getUserArmour(username);
+        console.log("success")
+        res.json({success: true, data: armour});
+
+
+    } catch (err) {
+        console.error("Error finding username: ", err);
+        res.status(500).json({ success: false, message: "Failed to find username" });
+    }
+})
+
 router.post('/players-missions-completed-division', async (req, res) => {
     try {
         const { missions } = req.body;  // Retrieve missions array from the request body
-
         if (!Array.isArray(missions)) {
             return res.status(400).json({ success: false, message: "Missions must be an array" });
         }

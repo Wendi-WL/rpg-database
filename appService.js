@@ -232,6 +232,61 @@ async function getMostPopularItems() {
         return [];
     });
 }
+async function getGuildsWithMoreThanTwoMembers() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT guildName, COUNT(*) AS memberCount
+             FROM PlayerJoins
+             WHERE guildName IS NOT NULL
+             GROUP BY guildName
+             HAVING COUNT(*) > 1
+             ORDER BY memberCount DESC`
+        );
+        return result.rows; // Return the rows containing guild names and member counts
+    }).catch((err) => {
+        console.error("Error fetching guilds with more than two members:", err);
+        return [];
+    });
+}
+
+async function getGuildsWithAboveAverageFriendship() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `WITH OverallAverage AS (
+                 SELECT AVG(B2.friendshipLevel) AS overallAvgFriendship
+                 FROM Befriends B2
+             )
+             SELECT P.guildName, 
+                    AVG(B.friendshipLevel) AS avgFriendshipLevel,
+                    AVG(B.friendshipLevel) - (SELECT overallAvgFriendship FROM OverallAverage) AS differenceFromAverage
+             FROM PlayerJoins P
+             JOIN Befriends B ON P.accountID = B.account1ID
+             GROUP BY P.guildName
+             HAVING AVG(B.friendshipLevel) > (SELECT overallAvgFriendship FROM OverallAverage)`
+        );
+        return result.rows; // Return the rows containing guild names, their average friendship levels, and the difference
+    }).catch((err) => {
+        console.error("Error fetching guilds with friendship level differences:", err);
+        return [];
+    });
+}
+async function getUserArmour(username) {
+    return await withOracleDB(async( connection) => {
+        const result = await connection.execute(
+            `SELECT armourID, boostType, name
+             FROM PlayerJoins PJ
+             INNER JOIN CraftsArmour CA
+             ON PJ.accountID = CA.accountID
+             WHERE PJ.username = :username`,
+             [username],
+             {autoCommit: true}
+        )
+        return result.rows;
+    }).catch((err) => {
+        console.error("Error finding username:", err);
+        return [];
+    });
+}
 
 async function getPlayersMissionsCompletedDivision(missions) {
     return await withOracleDB(async (connection) => {
@@ -288,5 +343,8 @@ module.exports = {
     selectPlayerTuples,
     getMostPopularItems,
     selectArmourTuples,
+    getUserArmour,
+    getGuildsWithMoreThanTwoMembers,
+    getGuildsWithAboveAverageFriendship,
     getPlayersMissionsCompletedDivision
 };
